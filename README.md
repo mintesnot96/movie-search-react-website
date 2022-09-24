@@ -1,6 +1,7 @@
 # Find Your Robot Friend
 # React App
-Robot API link [robohash.org](https://robohash.org)
+Robot picture API link [robohash.org](https://robohash.org)
+JSONPlaceholder API link [https://jsonplaceholder.typicode.com/](https://jsonplaceholder.typicode.com/users)
 
 Tutorial for React To run the project:
 1. Clone this repo  `git clone https://github.com/mintesnot96/robofriend.git`
