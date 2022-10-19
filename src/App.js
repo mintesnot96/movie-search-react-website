@@ -1,50 +1,49 @@
-import { robots } from "./robots";
-import CardList from "./CardList";
-import SearchBox from "./SearchBox";
-import { Component } from "react";
-import './App.css'
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      robots: [],
-      searchrdfield: "",
-    };
-  }
+import React from "react";
+import { useState, useEffect } from "react";
+import "./App.css";
+import SearchIcon from "./search.svg";
+import MovieCard from "./MovieCard";
 
-  onSearchchange = (event) => {
-    this.setState({ searchrdfield: event.target.value });
+const API_URL = " http://www.omdbapi.com/?apikey=c86d9ce5";
+
+const App = () => {
+  const [movies, setMovies] = useState([]);
+  const [searcTerm,setSearchTerm]=useState('')
+  const searchMovies = async (title) => {
+    const response = await fetch(`${API_URL}&s=${title}`);
+    const data = await response.json();
+    setMovies(data.search);
+    setMovies(data.Search);
+
   };
+  useEffect(() => {
+    searchMovies('Spiderman');
+  }, []);
 
-componentDidMount(){
-  fetch('https://jsonplaceholder.typicode.com/users').then(response=>response.json()).then(users=>this.setState({robots: users}));
-}
-
-  render() {
-    const filteredrobots = this.state.robots.filter((robots) => {
-      return robots.name
-        .toLowerCase()
-        .includes(this.state.searchrdfield.toLowerCase());
-    }); 
-   
-   if(this.state.robots.length==0){
-    return (
-      <h1 className="tc">
-        Loading...
-      </h1>
-    );
-
-   }
-    else{return (
-      <div className="tc">
-        <h1 className="f1">RobotFriends</h1>
-
-        <SearchBox searchChange={this.onSearchchange} />
-
-        <CardList robots={filteredrobots} />
+  return (
+    <div className="app">
+      <h1>MovieLand</h1>
+      <div className="search">
+        <input
+          placeholder="Search for movies"
+          value={searcTerm}
+          onChange={(e) => setSearchTerm(e.target.value) }
+        />
+        <img src={SearchIcon} alt="search" onClick={() => searchMovies(searcTerm)} />
       </div>
-    );}
-  }
-}
+      {movies?.length > 0 ? (
+        <div className="container">
+          {movies.map((movie) => (
+            <MovieCard movie={movie} />
+          ))}
+        </div>
+      ) : (
+        <div className="empty">
+          <h2>No movies found</h2>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default App;
